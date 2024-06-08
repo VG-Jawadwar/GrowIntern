@@ -1,0 +1,239 @@
+import java.io.IOException;
+import java.util.Scanner;
+
+class Error extends Exception{
+	Error(String msg)
+	{
+		super(msg);
+	}
+}
+
+public class BMS{
+	long ACCNO;
+	long Bal;
+	String name;
+	String Nname;
+	String ACtype;
+	String Add;
+	public static int i;
+	public static int lcount;
+
+	void createAcc(int id)
+	{
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the Name of Account Holder: ");
+		name = sc.nextLine();
+		System.out.println("Enter the Name of Nominee: ");
+		Nname = sc.nextLine();
+		System.out.println("Enter the Address: ");
+		Add = sc.nextLine();
+		System.out.println("Enter the Account Type (Saving/Salary/Current): ");
+		ACtype = sc.nextLine();
+		System.out.println("Enter Amount Which you Want to Deposit: ");
+		Bal = sc.nextLong();
+		if(Bal<0)
+		{
+			System.out.println("!!!!Invalid Amount to Deposit!!!!");
+		}
+		ACCNO = 1000 +id;
+		System.out.println("\n!!!!Welcome "+ name +" Your Account is created Successfully!!!!");
+	}
+	void Checkinfo()
+	{
+		System.out.println("Name of Account Holder: "+ name);
+		System.out.println("Name of Nominee: "+Nname);
+		System.out.println("Current Address: "+ Add);
+		System.out.println("Account Type: (Saving/Salary/Current): "+ ACtype);
+		System.out.println("Account Balance: "+Bal);
+	}
+
+	public static void main(String[] args)throws IOException {
+
+		BMS B[] = new BMS[100];
+		int ch;
+		int n;
+		int flag = 0;
+		lcount = 0;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("-------------------------------------------------");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t!!!!Welcome To Sky Bank!!!!\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("-------------------------------------------------");
+		i=0;
+		try {
+			do {
+				System.out.println("\nWhat you want to do.. \n 1. New Account \n 2. Balance \n 3. Know My Account Number \n 4. withdraw Balance \n 5. Deposit Balance \n 6. Check personal Information \n Enter your Choice.. ");
+				ch = sc.nextByte();
+				flag = 0;
+
+				if (ch == 1) {
+					lcount++;
+					i++;
+				}
+
+				switch (ch) {
+					case 1:
+						do {
+							B[i] = new BMS();
+							B[i].createAcc(i);
+						} while (i < lcount);
+						break;
+
+					case 2:
+						System.out.println("Enter Your Customer Id: ");
+						long ACNO = sc.nextLong();
+
+						for (int i = 1; i <= lcount; i++) {
+							if ((B[i].ACCNO) != ACNO) {
+								continue;
+							} else {
+								flag = 1;
+								System.out.println("Your Account Balance is: " + B[i].Bal);
+								break;
+							}
+						}
+						if(flag == 0) {
+							throw new Error("Enter Valid Customer Id!!!!!");
+						}else
+						{
+							break;
+						}
+
+					case 3:
+						System.out.println("Enter Your Name: ");
+						sc.nextLine();
+						String AHName = sc.nextLine();
+
+						for (int i = 1; i <= lcount; i++) {
+							if (AHName.equals(B[i].name) == false)
+							{
+								continue;
+							} else {
+								flag = 1;
+								System.out.println("Your Customer Id is: " + B[i].ACCNO);
+								break;
+							}
+						}
+						if (flag == 0) {
+							throw new Error("Enter Valid Customer Name!!!!!");
+						}else
+						{
+							break;
+						}
+
+					case 4:
+						System.out.println("Enter Your Customer Id: ");
+						long Waccno = sc.nextLong();
+						System.out.println("Enter Amount you Want to withdraw: ");
+						long Wamount = sc.nextLong();
+						if(Wamount>B[i].Bal)
+						{
+							System.out.println("!!!!Insufficient Balance to Withdraw!!!!");
+							break;
+						}
+						if(Wamount<0)
+						{
+							System.out.println("!!!!Invalid Amount to Withdraw!!!!");
+							break;
+						}
+
+						for (int i = 1; i <= lcount; i++) {
+							if ((B[i].ACCNO) != Waccno) {
+								continue;
+							} else {
+								flag = 1;
+								B[i].Bal -= Wamount;
+								System.out.println("Your Current Account Balance is: " + B[i].Bal);
+								break;
+							}
+						}
+						if (flag == 0) {
+							throw new Error("Enter Valid Customer Id!!!!!");
+						}else
+						{
+							break;
+						}
+
+					case 5:
+						System.out.println("Enter Your Customer Id: ");
+						long Daccno = sc.nextLong();
+						System.out.println("Enter Amount you Want to Deposit: ");
+						long Damount = sc.nextLong();
+						if(Damount<0)
+						{
+							System.out.println("!!!!Invalid Amount to Deposit!!!!");
+							break;
+						}
+
+						for (int i = 1; i <= lcount; i++) {
+							if ((B[i].ACCNO) != Daccno) {
+								continue;
+							} else {
+								flag = 1;
+								B[i].Bal += Damount;
+								System.out.println("Your Current Account Balance is: " + B[i].Bal);
+								break;
+							}
+						}
+						if (flag == 0) {
+							throw new Error("Enter Valid Customer Id!!!!!");
+						}else
+						{
+							break;
+						}
+
+					case 6:
+						System.out.println("Enter Your Customer Id: ");
+						long iACNO = sc.nextLong();
+						for (int i = 1; i <= lcount; i++) {
+							if ((B[i].ACCNO) != iACNO) {
+								continue;
+							} else {
+								flag = 1;
+								System.out.println("Your Current Account Details is: ");
+								B[i].Checkinfo();
+								break;
+							}
+						}
+						if (flag == 0) {
+							throw new Error("Enter Valid Customer Id!!!!!");
+						}
+						if (flag == 1)
+							break;
+					default:
+						System.out.println("Enter Valid Choice!!!!");
+				}
+				System.out.println("\nDo you Want to Continue?\n1.Confirm \n2.Exit \n Enter your Choice: ");
+				n = sc.nextInt();
+				if(n > 2)
+				{
+					return;
+				}
+			} while (n != 2);
+		}catch (Exception e)
+		{
+			System.out.println("Error Occurred: "+ e.getMessage());
+		}
+		System.out.println("-------------------------------------------------");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("\t\t\t\tThank You");
+		System.out.println("\tYou have Successfully Logged Out...");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("|\t\t\t\t\t\t\t\t\t\t\t\t|");
+		System.out.println("-------------------------------------------------");
+	}
+}
+
+
+/*
+
+   MADE BY:
+      Vaibhav Jawadwar 
+      copyrighted © by Vaibhav Jawadwar. All rights Reserved.
+*/
